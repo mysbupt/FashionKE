@@ -30,3 +30,7 @@ Thumbs.db
 data
 data*
 data/*
+checkpoint/*
+params/*
+result/*
+__pycache__
