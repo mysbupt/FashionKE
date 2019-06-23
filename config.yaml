@@ -10,26 +10,12 @@ lr_decay_gamma: 0.1
 weight_decay: 0.00001
 momentum: 0.9
 model_save_path: "./params/"
+checkpoint: "./checkpoint/" 
 data_path: "./data"
 mid_layer: 512 
 word_embed_size: 300
-text_cnn_dropout_rate: 0.5
-text_rep_size: 512
-whole_img_context: 0
-visual_cooc_context: 0
-text_context: 0
 token_num: 7383
-multi_lstm: 1
-
 max_cloth_num: 5
-loss: "all" # all options: occasion, category, attributes, all
-mode: "image" # all options: image, add_person, add_social_context, add_visual_context
-checkpoint: "./checkpoint/" 
-use_simplified_attr: 1 
-use_different_lr: 1
-small_data: 0
-load_pretrain_cnn: 0
-attr: 0
 
 noise_ratio: 0.7 # 0.0, 0.1, 0.3, 0.5, 0.7
 result_path: "./result"

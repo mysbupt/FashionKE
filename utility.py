@@ -177,12 +177,8 @@ class InstagramDataNew(InstagramData):
 class FashionData():
     def __init__(self, conf):
         self.conf = conf
-        if conf["small_data"]:
-            train_ids = json.load(open(conf["data_path"] + "/small_train_ids.json"))
-            test_ids = json.load(open(conf["data_path"] + "/small_test_ids.json"))
-        else:
-            train_ids = json.load(open(conf["data_path"] + "/train_ids_%.1f.json" %(conf["noise_ratio"])))
-            test_ids = json.load(open(conf["data_path"] + "/test_ids.json"))
+        train_ids = json.load(open(conf["data_path"] + "/train_ids_%.1f.json" %(conf["noise_ratio"])))
+        test_ids = json.load(open(conf["data_path"] + "/test_ids.json"))
 
         self.labelled_pool = set(json.load(open(conf["data_path"] + "/labelled_pool.json")))
 
@@ -190,16 +186,11 @@ class FashionData():
         test_ids = test_ids[:len(test_ids)-len(test_ids)%conf["batch_size"]]
         img_meta_map = json.load(open(conf["data_path"] + "/cloth_body_face_meta.json"))
 
-        #self.word_embedding = None
-        #self.id_text_map = None
         self.word_embedding = np.load(conf["data_path"] + "/word_embeds.npy")
         self.meta_embed = self.get_meta_embed()
         self.id_text_map = json.load(open(conf["data_path"] + "/id_text_preprocessed.json"))
        
-        if conf["use_simplified_attr"]:
-            self.attr_code = json.load(open(conf["data_path"] + "/code_attr_simplified.json"))
-        else:
-            self.attr_code = json.load(open(conf["data_path"] + "/code_attr.json"))
+        self.attr_code = json.load(open(conf["data_path"] + "/code_attr.json"))
         self.attr_val_code = json.load(open(conf["data_path"] + "/code_attr_val.json"))
         self.cat_code = json.load(open(conf["data_path"] + "/code_cat.json"))
         self.occ_code = json.load(open(conf["data_path"] + "/code_occasion.json"))

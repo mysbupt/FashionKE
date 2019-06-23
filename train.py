@@ -40,10 +40,6 @@ def get_cmd():
     return args
 
 
-def load_pretrained(model, model_path):
-    model.load_state_dict(torch.load(model_path))
-
-
 def train_fashion_recognition(conf):
     dataset = FashionData(conf)
     train_dataloader = dataset.train_dataloader
@@ -76,29 +72,23 @@ def train_fashion_recognition(conf):
     # init optimizer
     lr = conf["lr"]
     weight_decay = conf["weight_decay"]
-    if conf["use_different_lr"] == 1:
-        params = [
-            {'params': model.imageCNN.parameters(), 'lr': 0.5*lr},
-            {'params': model.catW.parameters(), 'lr': lr},
-            {'params': model.occW.parameters(), 'lr': lr},
-            {'params': model.attrWs.parameters(), 'lr': lr},
-            {'params': model.attrW1s.parameters(), 'lr': lr},
-            {'params': model.occ_classifier.parameters(), 'lr': lr},
-            {'params': model.cat_classifier.parameters(), 'lr': lr},
-            {'params': model.attr_classifiers.parameters(), 'lr': lr},
-            #{'params': model.textEmbedding.parameters(), 'lr': 0.1 * lr},
-            {'params': model.convs1.parameters(), 'lr': lr},
-            {'params': model.textW.parameters(), 'lr':  lr},
-            {'params': model.attr_context_rnn.parameters(), 'lr': lr},
-            {'params': model.visual_context_rnn.parameters(), 'lr': lr},
-            {'params': model.attr_noise_transitions.parameters(), 'lr': 0.001 * lr},
-            {'params': model.cat_noise_transition.parameters(), 'lr': 0.001 * lr}
-        ]
-        optimizer = torch.optim.SGD(params, lr=lr, momentum=conf["momentum"])
-    else:
-        optimizer = torch.optim.SGD([
-            {'params': model.parameters(), 'lr': lr, 'weight_decay': weight_decay}
-        ], lr=lr, momentum=conf["momentum"])
+    params = [
+        {'params': model.imageCNN.parameters(), 'lr': 0.5*lr},
+        {'params': model.catW.parameters(), 'lr': lr},
+        {'params': model.occW.parameters(), 'lr': lr},
+        {'params': model.attrWs.parameters(), 'lr': lr},
+        {'params': model.attrW1s.parameters(), 'lr': lr},
+        {'params': model.occ_classifier.parameters(), 'lr': lr},
+        {'params': model.cat_classifier.parameters(), 'lr': lr},
+        {'params': model.attr_classifiers.parameters(), 'lr': lr},
+        {'params': model.convs1.parameters(), 'lr': lr},
+        {'params': model.textW.parameters(), 'lr':  lr},
+        {'params': model.attr_context_rnn.parameters(), 'lr': lr},
+        {'params': model.visual_context_rnn.parameters(), 'lr': lr},
+        {'params': model.attr_noise_transitions.parameters(), 'lr': 0.001 * lr},
+        {'params': model.cat_noise_transition.parameters(), 'lr': 0.001 * lr}
+    ]
+    optimizer = torch.optim.SGD(params, lr=lr, momentum=conf["momentum"])
     exp_lr_scheduler = lr_scheduler.StepLR(optimizer, step_size=int(conf["lr_decay_interval"]*len(train_dataloader)), gamma=conf["lr_decay_gamma"])
 
     best_occ_acc = 0.0
@@ -183,7 +173,6 @@ def train_fashion_recognition(conf):
                     loss = attr_ttl_loss
                 if conf["loss"] == "all":
                     loss = torch.sum(torch.stack([occ_loss, cat_loss] + per_attr_losses, dim=0)) / (num_valid_attr + 2)
-                    #loss = occ_loss + cat_loss + attr_ttl_loss
             else:
                 cat_loss = torch.sum(cat_losses * cat_masks)
                 cat_loss = cat_loss / torch.sum(cat_masks)
@@ -200,14 +189,12 @@ def train_fashion_recognition(conf):
                         per_attr_losses.append(torch.sum(attr_losses[:, :, code]) / denorm)
                 attr_ttl_loss = torch.sum(torch.stack(per_attr_losses, dim=0)) / num_valid_attr 
 
-                #loss = occ_loss + cat_loss + attr_ttl_loss
                 if conf["loss"] == "cat":
                     loss = cat_loss
                 if conf["loss"] == "attr":
                     loss = attr_ttl_loss
                 if conf["loss"] == "all":
                     loss = torch.sum(torch.stack([occ_loss, cat_loss] + per_attr_losses, dim=0)) / (num_valid_attr + 2)
-                    #loss = occ_loss + cat_loss + attr_ttl_loss
 
             log_value("occ_loss", occ_loss.item(), step)
             log_value("cat_loss", cat_loss.item(), step)
@@ -224,7 +211,7 @@ def train_fashion_recognition(conf):
                 attr_loss_print[i].append(each_attr_loss)
             
             cat_loss_print.append(cat_loss.item())
-            if (batch_cnt+1) % 200 == 0:
+            if (batch_cnt+1) % 10 == 0:
                 each_attr_loss = []
                 for attr, code in sorted(dataset.attr_code.items(), key=lambda i: i[1]):
                     each_attr_loss.append("%s:%f.4" %(attr, mean(attr_loss_print[code])))
@@ -261,8 +248,8 @@ def train_fashion_recognition(conf):
                     best_attr_val_acc = attr_val_ttl_acc
                     print("achieve best performance, save model.")
                     print("best_occ: %f, best_cat: %f, best_attr: %f" %(best_occ_acc, best_cat_acc, best_attr_val_acc))
-                    #model_save_path = os.path.join(conf["model_save_path"], log_file_name)
-                    #torch.save(model.state_dict(), model_save_path)
+                    model_save_path = os.path.join(conf["model_save_path"], log_file_name)
+                    torch.save(model.state_dict(), model_save_path)
 
 
 def mean(num_list):
@@ -315,10 +302,10 @@ def test_fashion_recognition(model, dataset, conf):
     tmp_attr_val = torch.cat(attr_val, dim=0).numpy() # [test_size, num_cloth, num_attr]
     tmp_attr_val_mask = torch.cat(attr_val_mask, dim=0).numpy() # [test_size, num_cloth, num_attr]
 
-    #np.save(conf["result_path"] + "/attr_val_res", tmp_attr_val_res)
-    #np.save(conf["result_path"] + "/occ_res", occ_res)
-    #np.save(conf["result_path"] + "/cat_res", cat_res)
-    #np.save(conf["result_path"] + "/cat_mask", cat_mask)
+    np.save(conf["result_path"] + "/attr_val_res", tmp_attr_val_res)
+    np.save(conf["result_path"] + "/occ_res", occ_res)
+    np.save(conf["result_path"] + "/cat_res", cat_res)
+    np.save(conf["result_path"] + "/cat_mask", cat_mask)
 
     for attr, code in sorted(dataset.attr_code.items(), key=lambda i: i[1]):
         if conf["loss"] in ["cat_attr", "all"]:

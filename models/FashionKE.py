@@ -82,7 +82,7 @@ class OccCatAttrClassifier(nn.Module):
         Ks = [2, 3, 4, 5]
         self.convs1 = nn.ModuleList([nn.Conv2d(Ci, Co, (K, D)) for K in Ks])
         self.dropout = nn.Dropout(0.4)
-        self.textW = nn.Linear(len(Ks)*Co, self.context_fea_len)#self.conf["text_rep_size"]))
+        self.textW = nn.Linear(len(Ks)*Co, self.context_fea_len)
 
         tmp_attr_cls = []
         tmp_attr_Ws = []
