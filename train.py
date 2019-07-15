@@ -225,7 +225,7 @@ def train_fashion_recognition(conf):
             if (batch_cnt+1) % int(conf["test_interval"]*len(train_dataloader)) == 0:
                 #import ipdb
                 #ipdb.set_trace()
-                print("\n\nstart to test, mode: %s, loss: %s" %(conf["mode"], conf["loss"]))
+                print("\n\nstart to test, context: %s, loss: %s" %(conf["context"], conf["loss"]))
                 model.eval()
                 occ_acc, cat_acc, attr_val_acc = test_fashion_recognition(model, dataset, conf)
 

@@ -34,3 +34,4 @@ checkpoint/*
 params/*
 result/*
 __pycache__
+*.json
