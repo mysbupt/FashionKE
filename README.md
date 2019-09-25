@@ -1,5 +1,5 @@
 # FashionKE
-Code for fashion knowledge extraction from social media
+Code of paper: "Who, Where, and What to Wear? Extracting Fashion Knowledge from Social Media"
 
 ### Requirements
 python3
