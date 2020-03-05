@@ -1,4 +1,3 @@
-import argparse
 import datetime
 import torch
 torch.manual_seed(0)
@@ -24,20 +23,6 @@ from tensorboard_logger import configure, log_value
 from scipy.spatial.distance import pdist, cdist, squareform
 
 torch.multiprocessing.set_sharing_strategy('file_system')
-
-def get_cmd():
-    parser = argparse.ArgumentParser()
-    parser.add_argument("-lr", "--learning_rate", default=0.01, help="learning rate")
-    parser.add_argument("-ld", "--lr_decay_interval", default=4, help="learning rate decay interval")
-    parser.add_argument("-nr", "--noise_ratio", default=0.7, help="the noise ratio in the training set: 0, 0.1, 0.3, 0.5, 0.7")
-    parser.add_argument("-ncm", "--noise_cancel_method", default="forward", help="which noise cancelling method to use: forward or none")
-    parser.add_argument("-nbeta", "--noise_loss_beta", default=0.5, help="weight hyperparameter for modified noise")
-    parser.add_argument("-ct", "--context", default="all", help="which context to use: visual_cooc, task_ct, all, none")
-    parser.add_argument("-i", "--info", default="", help="some comments")
-    parser.add_argument("-l", "--loss", default="all", help="which loss to use: cat, attr, all")
-    parser.add_argument("-t", "--text", default=0, help="whether to use text")
-    args = parser.parse_args()
-    return args
 
 
 def train_fashion_recognition(conf):
@@ -325,8 +310,6 @@ def test_fashion_recognition(model, dataset, conf):
 
 def main():
     conf = yaml.load(open("./config.yaml"))
-
-    #paras = get_cmd()
     assert conf["noise_ratio"] in [0.0, 0.1, 0.3, 0.5, 0.7]
 
     train_fashion_recognition(conf)
