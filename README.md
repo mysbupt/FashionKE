@@ -1,5 +1,7 @@
 # FashionKE
-Code of paper: ["Who, Where, and What to Wear? Extracting Fashion Knowledge from Social Media"](https://dl.acm.org/doi/pdf/10.1145/3343031.3350889)
+
+### Introduction
+This repo is the code of paper: ["Who, Where, and What to Wear? Extracting Fashion Knowledge from Social Media"](https://dl.acm.org/doi/pdf/10.1145/3343031.3350889), which aims to extract {Cloth, Person, Occasion} -- triplet-formatted fashion knowledge -- from social media.
 
 ### Requirements
 python3  
@@ -21,3 +23,15 @@ python train.py
 The default tensorboard log files are saved at ./checkpoint, where you can start a tensorboard to see the training curve.   
 The default trained model parameters are saved at ./params.   
 The default prediction results are saved at ./result.
+
+### Citation
+If you use the code of this repo, kindly cite it as:  
+```
+@inproceedings{ma2019and,
+  title={Who, Where, and What to Wear? Extracting Fashion Knowledge from Social Media},
+  author={Ma, Yunshan and Yang, Xun and Liao, Lizi and Cao, Yixin and Chua, Tat-Seng},
+  booktitle={Proceedings of the 27th ACM International Conference on Multimedia},
+  pages={257--265},
+  year={2019}
+}
+```
