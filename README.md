@@ -35,3 +35,8 @@ If you use the code of this repo, kindly cite it as:
   year={2019}
 }
 ```
+
+### Acknowledgement
+This project is supported by the National Research Foundation, Prime Minister's Office, Singapore under its IRC@Singapore Funding Initiative.
+
+<img src="https://github.com/mysbupt/FashionKE/blob/master/next.png" width = "297" height = "100" alt="next" align=center />
