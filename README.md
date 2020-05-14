@@ -14,6 +14,9 @@ pickle
 tensorboard\_logger  
 scipy  
 
+### Dataset
+I am very sorry that we cannot release the dataset because the data are collected from Instagram users and we are unable to get all the users' authorization, even though it cost much money to manually check and fix the wrong labels. Hope the model and code of this paper will help or inspire you.
+
 ### Train
 You can modify the config file in config.yaml to change the hyper-parameters.
 
